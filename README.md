@@ -1,6 +1,7 @@
 **Title:** Academic Navigator
 
-**Purpose:** The users are prospective graduate students, early career researchers, who wants to explore authors, universities, and coauthor networks.
+**Purpose:** The users are prospective graduate students, early career researchers.
+They want to discover top authors, explore research areas, compare uhniversities, and manage a list of potential advisors. They also want to find potentail collaborators, see who's active in a certain domain, and keep track of interesting papers. 
 
 **Demo:** LINK
 
