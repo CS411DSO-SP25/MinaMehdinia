@@ -130,7 +130,7 @@ Each “widget” corresponds to one or more endpoints that query the appropriat
 
 * Client-side Widgets: modular JavaScript functions for fetch/error handling, DOM updates, and Chart.js instantiation.
 
-**Database Techniques:** 
+**💾 Database Techniques** 
 #### 1. Indexing
 Used MongoDB indexing to optimize keyword searches:
 ```python
@@ -149,6 +149,18 @@ All data access is routed through REST API endpoints built with FastAPI, allowin
 * Watchlist and paper tracking (MongoDB)
 * Collaborator graph and keyword trends (Neo4j)
 
+#### 4. Atomic Upserts
+
+MongoDB “watchlist” and “tracked papers” collections use update_one(..., upsert=True) for idempotent updates.
+
+#### 5. Query Optimization
+
+MongoDB: regex search with case‐insensitive indexing on frequently queried fields.
+	
+Neo4j: label and property indexes on KEYWORD.name for fast trend lookups.
+
+
+
 **✨Extra-Credit Capabilities:** 
 
 #### 1. RESTful Full-Stack Design
@@ -163,7 +175,9 @@ University Comparator combines data from both:
 
 This cross-database aggregation demonstrates advanced system design.
 
+#### 2.	Personal Watchlists & Paper Tracking
 
+Build and manage lists of faculty and papers for later review.
 
 
 **🤝 Contributions** 
