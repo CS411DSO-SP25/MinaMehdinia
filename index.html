@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Academic Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+      font-size: 14px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    .widget {
+      background: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+      max-width: 1200px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    canvas {
+      width: 100% !important;
+      height: 400px !important;
+    }
+
+    .search-box {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+
+    input[type="text"] {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 10px 14px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 15px;
+    }
+
+    .result-block {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 16px;
+      box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    .footer {
+      text-align: center;
+      color: #999;
+      margin-top: 40px;
+      font-size: 0.9em;
+    }
+    /* Widget 1: Top Authors by Citations */
+.widget-authors {
+  background: linear-gradient(135deg, #e5cfee 0%, #dee7ed 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: 30px;
+  color: #ffffff;
+}
+.widget-authors h2 {
+  color: #4409e7;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+#authorChart {
+  border: 2px solid rgba(255,255,255,0.7);
+  border-radius: 6px;
+  margin-top: 12px;
+}
+    /* Widget 2: University Comparison */
+.widget-university-compare {
+  background: linear-gradient(135deg, #a0e9fd 0%, #63cdda 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+}
+.widget-university-compare h2 {
+  color: #064663;
+}
+.search-box-university {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.search-box-university input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 2px solid #064663;
+  border-radius: 6px;
+  background: #e0f7fa;
+  color: #064663;
+}
+.search-box-university button {
+  padding: 10px 16px;
+  border: none;
+  background-color: #064663;
+  color: #ffffff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#universityResults .result-block {
+  background: white;
+  border-left: 6px solid #0288d1;
+  padding: 16px;
+  border-radius: 6px;
+  margin-top: 12px;
+}
+#universityResults .result-block h3 {
+  color: #0288d1;
+}
+    /* Widget 3: Search Faculty by Keyword */
+.widget-faculty-search {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+}
+.widget-faculty-search h2 {
+  color: #9d50bb;
+}
+.search-box-faculty-search {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.search-box-faculty-search input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 2px solid #9d50bb;
+  border-radius: 6px;
+}
+.search-box-faculty-search button {
+  padding: 10px 16px;
+  border: none;
+  background-color: #9d50bb;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#searchResults .result-block {
+  background: #fff;
+  border-left: 6px solid #9d50bb;
+  padding: 16px;
+  border-radius: 6px;
+  margin-top: 12px;
+}
+    /* Widget 4: Keyword Trend Over Time  */
+.widget-keyword-trend {
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+}
+.widget-keyword-trend h2 {
+  color: #000000;
+}
+.search-box-keyword-trend {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.search-box-keyword-trend input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 2px solid #e67e22;
+  border-radius: 6px;
+}
+.search-box-keyword-trend button {
+  padding: 10px 16px;
+  border: none;
+  background-color: #e67e22;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#trendChart {
+  border: 2px solid #000000;            
+  border-radius: 6px;
+  margin-top: 16px;
+}
+#trendError {
+  color: #c0392b;
+  font-weight: bold;
+  margin-top: 10px;
+}
+    /* Widget 5: Colorful Faculty Watchlist */
+  .widget-watchlist {
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    margin-bottom: 30px;
+    color: #333;
+  }
+  .widget-watchlist h2 {
+    color: #e63946;
+  }
+  .search-box-watchlist {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .search-box-watchlist input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 2px solid #e63946;
+    border-radius: 6px;
+  }
+  .search-box-watchlist button {
+    padding: 10px 14px;
+    border: none;
+    background-color: #e63946;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  #watchSearchResults .result-block {
+    background: white;
+    border-left: 6px solid #e63946;
+    padding: 16px;
+    border-radius: 6px;
+    margin-top: 12px;
+  }
+  #watchlistContainer .result-block {
+    background: white;
+    border-left: 6px solid #006d77;
+    padding: 16px;
+    border-radius: 6px;
+    margin-top: 12px;
+  }
+  #watchlistContainer .result-block img {
+    border-radius: 50%;
+    border: 2px solid #006d77;
+  }
+  #watchlistContainer .result-block button {
+    background-color: #006d77;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    float: right;
+  }
+    /* Widget 6: Green accent */
+    .widget-green {
+      border-top: 4px solid #28a745;
+    }
+    .search-box-green {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .search-box-green input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #28a745;
+      border-radius: 6px;
+    }
+    .search-box-green button {
+      padding: 10px 14px;
+      border: none;
+      background-color: #28a745;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .result-green {
+      margin-top: 15px;
+      background-color: #eafaf1;
+      padding: 16px;
+      border-radius: 10px;
+    }
+    .result-green .paper-item {
+      margin-bottom: 12px;
+    }
+    .result-green .paper-item button {
+      margin-left: 12px;
+      background-color: #218838;
+      padding: 4px 8px;
+      border: none;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .tracked-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    .tracked-table th, .tracked-table td {
+      padding: 8px;
+      border: 1px solid #ddd;
+    }
+    .tracked-table th {
+      background-color: #28a745;
+      color: white;
+    }
+    .tracked-table td button {
+      background-color: #c82333;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+/* Widget 7: Active Researchers – Sunrise Gradient */
+.widget-active-researchers {
+      background: linear-gradient(135deg, #ffe47a 0%, #ffb347 100%);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+    }
+    .widget-active-researchers h2 {
+      color: #663300;               
+      margin-bottom: 12px;
+    }
+    .search-box-active {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .search-box-active input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 2px solid #663300;
+      border-radius: 6px;
+      background: #fffbe6;
+      color: #663300;
+    }
+    .search-box-active button {
+      padding: 10px 16px;
+      border: none;
+      background-color: #663300;
+      color: #ffffff;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #activeResults .result-card {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #ffffff;
+      border-left: 6px solid #663300;
+      border-radius: 6px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+    #activeResults .result-card img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    #activeResults .result-card .info h3 {
+      margin: 0;
+      color: #663300;
+    }
+    #activeResults .result-card .info p {
+      margin: 4px 0;
+      color: #333333;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Academic Dashboard</h1>
+
+  <!-- Widget 1: Top Authors by Citations -->
+<div class="widget widget-authors">
+    <h2>Top Authors by Citations</h2>
+    <canvas id="authorChart"></canvas>
+  </div>
+
+  <!-- Widget 2: University Comparator -->
+  <div class="widget widget-university-compare">
+    <h2>University Comparison</h2>
+    <div class="search-box search-box-university">
+      <input type="text" id="universityInput" placeholder="Enter 2+ universities (e.g., MIT, Stanford)">
+      <button onclick="fetchUniversityComparison()">Compare</button>
+    </div>
+    <div id="universityResults"></div>
+  </div>
+
+ <!-- Widget 3: Search Faculty by Keyword -->
+<div class="widget widget-faculty-search">
+    <h2>Search Faculty by Keyword</h2>
+    <div class="search-box search-box-faculty-search">
+      <input type="text" id="keywordInput" placeholder="Enter a keyword...">
+      <button onclick="searchFaculty()">Search</button>
+    </div>
+    <div id="searchResults"></div>
+  </div>
+  
+  <!-- Widget 4: Keyword Trend Over Time -->
+  <div class="widget widget-keyword-trend">
+    <h2>Keyword Trend Over Time</h2>
+    <div class="search-box search-box-keyword-trend">
+      <input type="text" id="trendKeywordInput" placeholder="Enter a keyword (e.g., machine learning)">
+      <button onclick="fetchKeywordTrend()">Show Trend</button>
+    </div>
+    <canvas id="trendChart"></canvas>
+    <div id="trendError"></div>
+  </div>
+    <!-- Widget 5: Faculty Watchlist -->
+<div class="widget widget-watchlist">
+    <h2>Faculty Watchlist</h2>
+  
+    <!-- 5a: Search by Name -->
+    <div class="search-box search-box-watchlist">
+      <input type="text" id="watchSearchInput" placeholder="Search faculty by name...">
+      <button onclick="searchFacultyByName()">Search</button>
+    </div>
+    <div id="watchSearchResults"></div>
+  
+    <hr/>
+  
+    <!-- 5b: Display Watchlist -->
+    <h3>Your Watchlist</h3>
+    <div id="watchlistContainer"></div>
+  </div>
+
+<!-- Widget 6: Papers Tracking -->
+<div class="widget widget-green">
+    <h2>Track Papers</h2>
+
+    <!-- 6a: Search for papers -->
+    <div class="search-box-green">
+      <input type="text" id="paperSearchInput" placeholder="Search papers by title or keyword...">
+      <button onclick="searchPapers()">Search</button>
+    </div>
+    <div id="paperSearchResults" class="result-green"></div>
+
+    <hr/>
+
+    <!-- 6b: Saved / Tracked papers -->
+    <h3>Saved Papers</h3>
+    <table class="tracked-table" id="trackedPapersTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Venue</th>
+          <th>Year</th>
+          <th>Citations</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- Widget 7: Active Researchers -->
+  <div class="widget widget-active-researchers">
+    <h2>Active Researchers by Keyword</h2>
+    <div class="search-box search-box-active">
+      <input type="text" id="activeInput" placeholder="Enter a research keyword...">
+      <button onclick="fetchActiveResearchers()">Find Researchers</button>
+    </div>
+    <div id="activeResults"></div>
+  </div>
+  <!------------------------------------------------->
+
+  <div class="footer">Powered by FastAPI + MySQL + MongoDB</div>
+
+  <script>
+    // Widget 1: Load Bar Chart
+    fetch('/top-authors')
+      .then(res => res.json())
+      .then(data => {
+        const names = data.map(a => a.name.trim());
+        const citations = data.map(a => parseInt(a.total_citations));
+        new Chart(document.getElementById("authorChart"), {
+          type: "bar",
+          data: {
+            labels: names,
+            datasets: [{
+              label: "Citations",
+              data: citations,
+              backgroundColor: "rgba(54, 162, 235, 0.7)"
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: {
+                label: ctx => `${ctx.raw.toLocaleString()} citations`
+              }}
+            },
+            scales: {
+              x: { ticks: { autoSkip: false }, grid: { display: false }},
+              y: { beginAtZero: true }
+            }
+          }
+        });
+      });
+
+    // Widget 2: University Comparator
+async function fetchUniversityComparison() {
+  const input = document.getElementById("universityInput").value;
+  const universities = input.split(",").map(u => u.trim()).filter(u => u);
+  if (universities.length < 2) {
+    alert("Please enter at least 2 universities.");
+    return;
+  }
+
+  const container = document.getElementById("universityResults");
+  container.innerHTML = "<p>Loading…</p>";
+
+  try {
+    const response = await fetch("/api/university-data", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ universities })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server returned ${response.status}`);
+    }
+
+    const data = await response.json();
+    container.innerHTML = "";
+
+    if (data.length === 0) {
+      container.innerHTML = "<p>No data found. Please check the university names and try again.</p>";
+      return;
+    }
+
+    data.forEach(row => {
+      const block = document.createElement("div");
+      block.className = "result-block";
+      block.innerHTML = `
+        <h3>${row.university}</h3>
+        <ul>
+          <li><strong>Faculty:</strong> ${row.faculty_count}</li>
+          <li><strong>Total Citations:</strong> ${Number(row.total_citations).toLocaleString()}</li>
+          <li><strong>Avg Citations:</strong> ${Number(row.avg_citations).toLocaleString()}</li>
+          <li><strong>Top Keywords:</strong> ${row.top_keywords.join(", ")}</li>
+        </ul>
+      `;
+      container.appendChild(block);
+    });
+
+  } catch (err) {
+    console.error("Error fetching university comparison:", err);
+    container.innerHTML = "<p style='color:red'>Error loading data. Check console for details.</p>";
+  }
+}
+    // Widget 3: Faculty Search via Mongo
+    function searchFaculty() {
+      const keyword = document.getElementById("keywordInput").value.trim();
+      if (!keyword) return;
+      fetch(`/search-faculty?keyword=${encodeURIComponent(keyword)}`)
+        .then(res => res.json())
+        .then(results => {
+          const container = document.getElementById("searchResults");
+          if (results.length === 0) {
+            container.innerHTML = "<p>No results found.</p>";
+            return;
+          }
+          container.innerHTML = results.map(r => `
+            <div>
+              <strong>${r.name}</strong><br/>
+              <em>Keyword:</em> ${r.keyword}<br/>
+              <em>Score:</em> ${r.score}
+              <hr/>
+            </div>
+          `).join("");
+        })
+        .catch(err => {
+          console.error("Error fetching faculty search:", err);
+        });
+    }
+  </script>
+    <script>
+      // Widget 4: Keyword Trend via Neo4j
+      let trendChartInstance = null;
+      async function fetchKeywordTrend() {
+        const kw = document.getElementById("trendKeywordInput").value.trim();
+        const errorDiv = document.getElementById("trendError");
+        errorDiv.textContent = "";
+        if (!kw) {
+          errorDiv.textContent = "Please enter a keyword.";
+          return;
+        }
+  
+        if (trendChartInstance) {
+          trendChartInstance.destroy();
+        }
+        const ctx = document.getElementById("trendChart").getContext("2d");
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+  
+        try {
+          const res = await fetch(`/api/keyword-trend?keyword=${encodeURIComponent(kw)}`);
+          const text = await res.text();
+          if (!res.ok) {
+            errorDiv.textContent = `Error ${res.status}: ${text}`;
+            return;
+          }
+          const data = JSON.parse(text);
+  
+          if (!Array.isArray(data) || data.length === 0) {
+            errorDiv.textContent = "No trend data found for that keyword.";
+            return;
+          }
+  
+          const years  = data.map(d => d.year);
+          const counts = data.map(d => d.count);
+  
+          trendChartInstance = new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: years,
+              datasets: [{
+                label: "Papers per Year",
+                data: counts,
+                fill: false,
+                tension: 0.1,
+                borderColor: "rgba(54, 162, 235, 0.7)"
+              }]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: { display: false }
+              },
+              scales: {
+                x: { grid: { display: false } },
+                y: { beginAtZero: true }
+              }
+            }
+          });
+        } catch (err) {
+          console.error("Error fetching keyword trend:", err);
+          errorDiv.textContent = "Network error; check console for details.";
+        }
+      }
+    </script>
+<script>
+// --- Widget 5: Watchlist JS ---
+async function searchFacultyByName() {
+  const name = document.getElementById("watchSearchInput").value.trim();
+  const container = document.getElementById("watchSearchResults");
+  container.innerHTML = "";
+  if (!name) return;
+
+  try {
+    const res = await fetch(`/api/faculty-search-name?name=${encodeURIComponent(name)}`);
+    const results = await res.json();
+    if (results.length === 0) {
+      container.innerHTML = "<p>No faculty found.</p>";
+      return;
+    }
+    results.forEach(f => {
+      const div = document.createElement("div");
+      div.className = "result-block";
+      const uni = f.affiliation?.name || "";
+      div.innerHTML = `
+        <img src="${f.photoUrl}" alt="${f.name}" style="width:40px;height:40px;border-radius:20px;vertical-align:middle;margin-right:8px;">
+        <strong>${f.name}</strong> <em>(${uni})</em>
+        <button onclick='addToWatchlist(${JSON.stringify(f.id)}, ${JSON.stringify(f.name)}, ${JSON.stringify(uni)}, ${JSON.stringify(f.photoUrl)})' style="margin-left:16px;">
+          Add
+        </button>
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Search error:", err);
+  }
+}
+
+async function addToWatchlist(id, name, university, photoUrl) {
+  try {
+    await fetch("/api/watchlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, name, university, photoUrl })
+    });
+    loadWatchlist();
+  } catch (err) {
+    console.error("Add error:", err);
+  }
+}
+
+async function removeFromWatchlist(id) {
+  try {
+    await fetch(`/api/watchlist/${encodeURIComponent(id)}`, { method: "DELETE" });
+    loadWatchlist();
+  } catch (err) {
+    console.error("Remove error:", err);
+  }
+}
+
+async function loadWatchlist() {
+  const container = document.getElementById("watchlistContainer");
+  container.innerHTML = "";
+  try {
+    const res = await fetch("/api/watchlist");
+    const list = await res.json();
+    if (list.length === 0) {
+      container.innerHTML = "<p>Your watchlist is empty.</p>";
+      return;
+    }
+    list.forEach(f => {
+      const div = document.createElement("div");
+      div.className = "result-block";
+      div.innerHTML = `
+        <img src="${f.photoUrl}" alt="${f.name}" style="width:40px;height:40px;border-radius:20px;vertical-align:middle;margin-right:8px;">
+        <strong>${f.name}</strong> <em>(${f.university})</em>
+        <button onclick='removeFromWatchlist(${JSON.stringify(f.id)})' style="margin-left:16px;">
+          Remove
+        </button>
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Load watchlist error:", err);
+  }
+}
+// --- Widget 6: Papers Tracking JS ---
+async function searchPapers() {
+      const q = document.getElementById("paperSearchInput").value.trim();
+      const container = document.getElementById("paperSearchResults");
+      container.innerHTML = "";
+      if (!q) return;
+
+      try {
+        const res = await fetch(`/api/papers-search?query=${encodeURIComponent(q)}`);
+        const list = await res.json();
+        if (list.length === 0) {
+          container.innerHTML = "<p>No papers found.</p>";
+          return;
+        }
+        list.forEach(p => {
+          const div = document.createElement("div");
+          div.className = "paper-item";
+          div.innerHTML = `
+            <strong>${p.title}</strong>
+            <em>(${p.venue}, ${p.year})</em>
+            <button onclick='trackPaper(${JSON.stringify(p)})'>Mark Interesting</button>
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        console.error("Paper search error:", err);
+      }
+    }
+
+    async function trackPaper(paper) {
+      try {
+        await fetch("/api/tracked-papers", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(paper)
+        });
+        loadTrackedPapers();
+      } catch (err) {
+        console.error("Track error:", err);
+      }
+    }
+
+    async function untrackPaper(id) {
+      try {
+        await fetch(`/api/tracked-papers/${encodeURIComponent(id)}`, { method: "DELETE" });
+        loadTrackedPapers();
+      } catch (err) {
+        console.error("Untrack error:", err);
+      }
+    }
+
+    async function loadTrackedPapers() {
+      const tbody = document.querySelector("#trackedPapersTable tbody");
+      tbody.innerHTML = "";
+      try {
+        const res = await fetch("/api/tracked-papers");
+        const list = await res.json();
+        if (list.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="5">No saved papers.</td></tr>`;
+          return;
+        }
+        list.forEach(p => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${p.title}</td>
+            <td>${p.venue}</td>
+            <td>${p.year}</td>
+            <td>${p.numCitations}</td>
+            <td><button onclick="untrackPaper(${JSON.stringify(p.id)})">Remove</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("Load tracked papers error:", err);
+      }
+    }
+
+    // Widget 7 
+    async function fetchActiveResearchers() {
+      const kw = document.getElementById("activeInput").value.trim();
+      const container = document.getElementById("activeResults");
+      container.innerHTML = "";
+      if (!kw) return;
+
+      try {
+        const res = await fetch(`/api/active-researchers?keyword=${encodeURIComponent(kw)}`);
+        const data = await res.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+          container.innerHTML = "<p>No active researchers found.</p>";
+          return;
+        }
+
+        data.forEach(r => {
+          const card = document.createElement("div");
+          card.className = "result-card";
+          card.innerHTML = `
+            <img src="${r.photoUrl}" alt="${r.name}">
+            <div class="info">
+              <h3>${r.name}</h3>
+              <p><strong>Recent Year:</strong> ${r.recent_year}</p>
+              <p><strong>Papers:</strong> ${r.count}</p>
+            </div>
+          `;
+          container.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Error fetching active researchers:", err);
+        container.innerHTML = "<p style='color:red;'>Error loading data.</p>";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      loadTrackedPapers();
+    });
+
+</script>
+  
+</body>
+</html>
