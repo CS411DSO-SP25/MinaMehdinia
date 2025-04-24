@@ -175,7 +175,7 @@ University Comparator combines data from both:
 
 This cross-database aggregation demonstrates advanced system design.
 
-#### 2.	Personal Watchlists & Paper Tracking
+#### 3.	Personal Watchlists & Paper Tracking
 
 Build and manage lists of faculty and papers for later review.
 
