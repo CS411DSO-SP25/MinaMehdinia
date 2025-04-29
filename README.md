@@ -9,7 +9,7 @@
 * Identify active researchers in a given domain
 * Search for papers by title or keyword and mark “interesting” works for later review
 
-**🔗 Demo:** Check out a live demo here: [Link}(https://mediaspace.illinois.edu/media/t/1_hg4x155y)
+**🔗 Demo:** Check out a live demo here: [Link](https://mediaspace.illinois.edu/media/t/1_hg4x155y)
 
 **🚀 Installation:** 
 
