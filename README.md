@@ -10,6 +10,7 @@
 * Search for papers by title or keyword and mark “interesting” works for later review
 
 **🔗 Demo:** Check out a live demo here: [Link](https://mediaspace.illinois.edu/media/t/1_hg4x155y)
+For better quality click [HERE](https://drive.google.com/file/d/10_m5D2bWwrJYLPHnH2rVppkcpnmJe-ks/view?usp=share_link)
 
 **🚀 Installation:** 
 
