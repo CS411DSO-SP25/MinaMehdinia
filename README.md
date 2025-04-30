@@ -1,3 +1,5 @@
+![](Academic_Dashboard.png)
+
 **🎓 Academic Navigator** 
 
 **📌Purpose:** Academic Navigator is designed for prospective graduate students and early-career researchers who want to:
