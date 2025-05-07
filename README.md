@@ -2,6 +2,8 @@
 
 **🎓 Academic Navigator** 
 
+Click [HERE](http://127.0.0.1:8000) to see my Dashboard. 
+
 **📌Purpose:** Academic Navigator is designed for prospective graduate students and early-career researchers who want to:
 
 * Discover top authors by citation impact
